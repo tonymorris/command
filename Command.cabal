@@ -6,6 +6,7 @@ Author:             Tony Morris <ʇǝu˙sıɹɹoɯʇ@ןןǝʞsɐɥ>
 Maintainer:         Tony Morris
 Synopsis:           A replacement for System.Exit and System.Process
 Category:           System
+Homepage:           https://github.com/tonymorris/command
 Description:
   Specifically, this library replaces @System.Exit.ExitCode@ with an abstract data type.
 Cabal-Version:      >= 1.2
