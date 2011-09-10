@@ -22,6 +22,9 @@ Library
   GHC-Options:      
                     -Wall
 
+  Hs-Source-Dirs:
+                    src
+
   Exposed-Modules:  
                     System.Command
 

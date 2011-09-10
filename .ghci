@@ -1,3 +1,4 @@
+:set -isrc
 :l System.Command
 :m + System.Command
 :set prompt ">> "
