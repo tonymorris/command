@@ -32,8 +32,10 @@ module System.Command
 , exitSuccess
 , (->>)
 , (->>>)
+, (->->)
 , (<<-)
 , (<<<-)
+, (<-<-)
 , runExitCodes
   -- * Process completion
 , waitForProcess
@@ -177,6 +179,18 @@ a ->>> b =
   do a' <- a
      if isSuccess a' then b >> return () else return ()
 
+-- | Runs the first action.
+--
+-- Only if the result is successful, run the second action returning the first action's result.
+(->->) ::
+  Monad m =>
+  m ExitCode
+  -> m a
+  -> m ExitCode
+a ->-> b =
+  do a' <- a
+     if isSuccess a' then b >> return a' else return a'
+
 -- | Runs the second action.
 --
 -- Only if the result is successful, run the first action returning its result.
@@ -198,6 +212,17 @@ a ->>> b =
   -> m ()
 (<<<-) =
   flip (->>>)
+
+-- | Runs the second action.
+--
+-- Only if the result is successful, run the first action returning the second action's result.
+(<-<-) ::
+  Monad m =>
+  m a
+  -> m ExitCode
+  -> m ExitCode
+(<-<-) =
+  flip (->->)
 
 -- | Run the structure of actions stopping at the first failure.
 runExitCodes ::

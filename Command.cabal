@@ -1,5 +1,5 @@
 Name:               Command
-Version:            0.0.3
+Version:            0.0.4
 License:            BSD3
 License-File:       LICENSE
 Author:             Tony Morris <ʇǝu˙sıɹɹoɯʇ@ןןǝʞsɐɥ>
@@ -9,8 +9,12 @@ Category:           System
 Homepage:           https://github.com/tonymorris/command
 Description:
   Specifically, this library replaces @System.Exit.ExitCode@ with an abstract data type.
-Cabal-Version:      >= 1.2
+Cabal-Version:      >= 1.6
 Build-Type:         Simple
+
+Source-Repository   head
+  Type:             git
+  Location:         git@github.com:tonymorris/command.git
 
 Flag small_base
   Description:      Choose the new, split-up base package.
