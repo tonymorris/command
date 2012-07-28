@@ -42,10 +42,14 @@ module System.Command
 , waitForProcess
 , getProcessExitCode
 , P.terminateProcess
+  -- * Execution combinators
+, inDirectory
+, inDirectory'
 ) where
 
 import qualified System.Exit as E
 import qualified System.Process as P
+import System.Directory
 import Data.Data
 import Data.Monoid
 import Control.Arrow
@@ -317,6 +321,21 @@ getProcessExitCode ::
 getProcessExitCode =
   (fmap . fmap) fromExitCode . P.getProcessExitCode
 
+inDirectory ::
+  FilePath
+  -> (FilePath -> IO a)
+  -> IO a
+inDirectory d k =
+  do c <- getCurrentDirectory
+     setCurrentDirectory d
+     k c `finally` setCurrentDirectory c
+
+inDirectory' ::
+  FilePath
+  -> IO a
+  -> IO a
+inDirectory' p =
+  inDirectory p . const
 -- not exported
 
 toExitCode ::

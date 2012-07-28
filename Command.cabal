@@ -22,7 +22,8 @@ Flag small_base
 Library
   Build-Depends:
                     base < 5 && >= 4
-                    , process
+                    , process >= 1.0
+                    , directory >= 1.1
 
   GHC-Options:      
                     -Wall
