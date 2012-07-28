@@ -37,6 +37,7 @@ module System.Command
 , (<<<-)
 , (<-<-)
 , runExitCodes
+, traverseExitCodes
   -- * Process completion
 , waitForProcess
 , getProcessExitCode
@@ -231,6 +232,15 @@ runExitCodes ::
   -> m ExitCode
 runExitCodes =
   foldr (->>) (return success)
+
+-- | Traverse the structure of actions stopping at the first failure.
+traverseExitCodes ::
+  (Monad m, Foldable f, Functor f) =>
+  (a -> m ExitCode)
+  -> f a
+  -> m ExitCode
+traverseExitCodes f =
+  runExitCodes . fmap f
 
 -- | readProcessWithExitCode creates an external process, reads its
 -- standard output and standard error strictly, waits until the process
