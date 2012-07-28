@@ -50,6 +50,7 @@ import Data.Data
 import Data.Monoid
 import Control.Arrow
 import Control.Exception
+import Control.Monad
 import Prelude hiding (foldr)
 import Data.Foldable
 
@@ -178,7 +179,7 @@ a ->> b =
   -> m ()
 a ->>> b =
   do a' <- a
-     if isSuccess a' then b >> return () else return ()
+     when (isSuccess a') (void b) -- if isSuccess a' then b >> return () else return ()
 
 -- | Runs the first action.
 --
