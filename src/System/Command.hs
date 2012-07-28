@@ -173,7 +173,7 @@ a ->> b =
 --
 -- Only if the result is successful, run the second action returning no result.
 (->>>) ::
-  Monad m =>
+  (Monad m, Functor m) =>
   m ExitCode
   -> m a
   -> m ()
@@ -208,7 +208,7 @@ a ->-> b =
 --
 -- Only if the result is successful, run the first action returning no result.
 (<<<-) ::
-  Monad m =>
+  (Monad m, Functor m) =>
   m a
   -> m ExitCode
   -> m ()
