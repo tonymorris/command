@@ -8,6 +8,7 @@ import Control.Applicative
 import Control.Monad
 import Control.Monad.Trans.Class
 import Control.Monad.IO.Class
+import Data.Monoid
 import qualified System.Command as Cmd
 
 newtype Command m a =
@@ -34,11 +35,24 @@ instance Applicative m => Applicative (Command m) where
   Command mf <*> Command mx =
     Command (ap <$> mf <*> mx)
 
+instance Applicative m => Alternative (Command m) where
+  empty =
+    Command (pure (Left mempty))
+  Command mx <|> Command my =
+    Command (flip go <$> mx <*> my) where
+      go y = either (const y) Right
+
 instance Monad m => Monad (Command m) where
   return =
     Command . return . Right
   Command mx >>= f =
     Command (mx >>= either (return . Left) (runCommand . f))
+
+instance MonadPlus m => MonadPlus (Command m) where
+  mzero =
+    Command (return (Left mempty))
+  Command mx `mplus` Command my =
+    Command ((mx >>= either (const mzero) (return . Right)) `mplus` my)
 
 instance MonadTrans Command where
   lift =
