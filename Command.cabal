@@ -24,14 +24,14 @@ Library
                     base < 5 && >= 4
                     , process >= 1.0
                     , directory >= 1.1
+                    , transformers
 
-  GHC-Options:      
+  GHC-Options:
                     -Wall
 
   Hs-Source-Dirs:
                     src
 
-  Exposed-Modules:  
+  Exposed-Modules:
                     System.Command
-
-
+                    , System.Command.Monad
