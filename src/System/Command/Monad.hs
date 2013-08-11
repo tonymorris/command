@@ -29,18 +29,18 @@ instance Functor m => Functor (Command m) where
   fmap f (Command m) =
     Command (fmap (either Left (Right . f)) m)
 
-instance Applicative m => Applicative (Command m) where
+instance (Functor m, Monad m) => Applicative (Command m) where
   pure =
-    Command . pure . Right
+    Command . return . Right
   Command mf <*> Command mx =
-    Command (ap <$> mf <*> mx)
+    Command (mf >>= either (return . Left) go) where
+      go f = fmap (either Left (Right . f)) mx
 
-instance Applicative m => Alternative (Command m) where
+instance (Functor m, Monad m) => Alternative (Command m) where
   empty =
-    Command (pure (Left mempty))
+    Command (return (Left mempty))
   Command mx <|> Command my =
-    Command (flip go <$> mx <*> my) where
-      go y = either (const y) Right
+    Command (mx >>= either (const my) (return . Right))
 
 instance Monad m => Monad (Command m) where
   return =
@@ -48,11 +48,11 @@ instance Monad m => Monad (Command m) where
   Command mx >>= f =
     Command (mx >>= either (return . Left) (runCommand . f))
 
-instance MonadPlus m => MonadPlus (Command m) where
+instance Monad m => MonadPlus (Command m) where
   mzero =
     Command (return (Left mempty))
   Command mx `mplus` Command my =
-    Command ((mx >>= either (const mzero) (return . Right)) `mplus` my)
+    Command (mx >>= either (const my) (return . Right))
 
 instance MonadTrans Command where
   lift =
