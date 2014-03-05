@@ -4,6 +4,7 @@ module System.Command.Monad
 , command
 ) where
 
+import Prelude
 import Control.Applicative
 import Control.Monad
 import Control.Monad.Trans.Class
